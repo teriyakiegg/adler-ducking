@@ -19,3 +19,12 @@ tmp/
 .idea/
 .vscode/
 *.swp
+
+# Rails
+/backend/config/master.key
+/backend/config/credentials/*.key
+/backend/storage/
+/backend/tmp/
+
+# Frontend
+/frontend/dist/
