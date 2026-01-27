@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(brew install:*)",
+      "Bash(brew:*)",
+      "Bash(git config:*)",
+      "Bash(env)",
+      "Bash(~/.zshrc)",
+      "Bash(~/.bashrc)",
+      "Bash(export PATH=\"/opt/homebrew/opt/postgresql@17/bin:$PATH\":*)",
+      "Bash(bin/rails generate:*)",
+      "Bash(bin/rails db:migrate:*)"
+    ]
+  }
+}

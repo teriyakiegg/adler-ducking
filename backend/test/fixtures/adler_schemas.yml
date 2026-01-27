@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  life_tasks: 
+  life_direction: 
+  private_logic: 
+  inferiorities: 
+  courage_usage: 
+  social_interest: 
+
+two:
+  user: two
+  life_tasks: 
+  life_direction: 
+  private_logic: 
+  inferiorities: 
+  courage_usage: 
+  social_interest: 

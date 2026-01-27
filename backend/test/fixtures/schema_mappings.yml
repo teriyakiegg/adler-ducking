@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  adler_schema: one
+  message: one
+  field: MyString
+  value: MyText
+  confidence: 1.5
+  confirmed: false
+  source_text: MyText
+
+two:
+  adler_schema: two
+  message: two
+  field: MyString
+  value: MyText
+  confidence: 1.5
+  confirmed: false
+  source_text: MyText
