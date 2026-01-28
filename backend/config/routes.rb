@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      # Auth
+      post "auth/google", to: "auth#google"
+      get "auth/me", to: "auth#me"
+
       resources :conversations, only: [ :index, :show, :create ] do
         resources :messages, only: [ :create ]
         post :chat, to: "chat#create"
