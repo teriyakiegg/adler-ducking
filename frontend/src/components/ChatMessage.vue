@@ -7,57 +7,43 @@ defineProps<{
 </script>
 
 <template>
-  <div class="message" :class="message.role">
-    <div class="avatar">
-      <span v-if="message.role === 'eddie'">🦆</span>
-      <span v-else>👤</span>
+  <div class="flex items-start gap-4" :class="message.role === 'user' ? 'flex-row-reverse' : ''">
+    <!-- Avatar -->
+    <div
+      v-if="message.role === 'eddie'"
+      class="w-10 h-10 bg-gradient-to-br from-eddie-light to-eddie rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-eddie/20"
+    >
+      <span class="text-xl">🦆</span>
     </div>
-    <div class="content">
-      <div class="role">{{ message.role === 'eddie' ? 'Eddie' : 'You' }}</div>
-      <div class="text">{{ message.content }}</div>
+    <div
+      v-else
+      class="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary-500/20"
+    >
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+        />
+      </svg>
+    </div>
+
+    <!-- Message bubble -->
+    <div
+      class="max-w-[75%] rounded-2xl px-5 py-3 shadow-sm"
+      :class="
+        message.role === 'eddie'
+          ? 'bg-white border border-slate-100'
+          : 'bg-gradient-to-br from-primary-500 to-primary-600 text-white'
+      "
+    >
+      <div class="text-sm font-medium mb-1" :class="message.role === 'eddie' ? 'text-eddie-dark' : 'text-white/80'">
+        {{ message.role === 'eddie' ? 'Eddie' : 'You' }}
+      </div>
+      <div class="leading-relaxed whitespace-pre-wrap" :class="message.role === 'eddie' ? 'text-slate-700' : ''">
+        {{ message.content }}
+      </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.message {
-  display: flex;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-
-.message.eddie {
-  background: #f0f7ff;
-}
-
-.message.user {
-  background: #f5f5f5;
-}
-
-.avatar {
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.content {
-  flex: 1;
-}
-
-.role {
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 4px;
-  color: #666;
-}
-
-.text {
-  line-height: 1.5;
-  white-space: pre-wrap;
-}
-</style>

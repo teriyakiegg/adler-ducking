@@ -30,176 +30,170 @@ async function startNewConversation() {
 </script>
 
 <template>
-  <div class="home">
-    <header class="hero">
-      <div class="logo">🦆</div>
-      <h1>Adler Ducking</h1>
-      <p class="tagline">
-        Talk with Eddie, build your Adler Schema, and discover your life direction.
-      </p>
-      <button @click="startNewConversation" :disabled="isLoading" class="cta">
-        {{ isLoading ? 'Starting...' : 'Start Conversation' }}
-      </button>
+  <div class="min-h-screen">
+    <!-- Hero Section -->
+    <header class="relative overflow-hidden">
+      <!-- Background decorations -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div
+          class="absolute -top-40 -right-40 w-80 h-80 bg-primary-200/30 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute top-20 -left-20 w-60 h-60 bg-eddie-light/50 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-0 right-1/4 w-40 h-40 bg-blue-200/40 rounded-full blur-2xl"
+        ></div>
+      </div>
+
+      <div class="relative max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
+        <!-- Eddie mascot -->
+        <div class="mb-8">
+          <div
+            class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-eddie-light to-eddie rounded-full shadow-2xl shadow-eddie/30 animate-float"
+          >
+            <span class="text-7xl">🦆</span>
+          </div>
+        </div>
+
+        <h1
+          class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-slate-800 via-slate-700 to-primary-600 bg-clip-text text-transparent mb-6"
+        >
+          Adler Ducking
+        </h1>
+
+        <p class="text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Talk with Eddie, build your
+          <span class="font-semibold text-primary-600">Adler Schema</span>, and discover your life
+          direction through structured self-reflection.
+        </p>
+
+        <button @click="startNewConversation" :disabled="isLoading" class="btn-primary text-lg">
+          <span v-if="isLoading" class="flex items-center gap-2">
+            <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+                fill="none"
+              />
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
+            </svg>
+            Starting...
+          </span>
+          <span v-else class="flex items-center gap-2">
+            Start Conversation
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
     </header>
 
-    <section v-if="conversations.length" class="conversations">
-      <h2>Recent Conversations</h2>
-      <ul>
-        <li v-for="conv in conversations" :key="conv.id">
-          <router-link :to="`/chat/${conv.id}`">
-            <span class="title">{{ conv.title }}</span>
-            <span class="date">{{ new Date(conv.created_at).toLocaleDateString() }}</span>
-          </router-link>
-        </li>
-      </ul>
+    <!-- Recent Conversations -->
+    <section v-if="conversations.length" class="max-w-4xl mx-auto px-6 py-12">
+      <h2 class="text-2xl font-bold text-slate-800 mb-6">Recent Conversations</h2>
+      <div class="grid gap-4">
+        <router-link
+          v-for="conv in conversations"
+          :key="conv.id"
+          :to="`/chat/${conv.id}`"
+          class="card-hover p-5 flex items-center justify-between group"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center"
+            >
+              <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="font-semibold text-slate-800 group-hover:text-primary-600 transition-colors">
+                {{ conv.title }}
+              </div>
+              <div class="text-sm text-slate-500">
+                {{ new Date(conv.created_at).toLocaleDateString('ja-JP') }}
+              </div>
+            </div>
+          </div>
+          <svg
+            class="w-5 h-5 text-slate-400 group-hover:text-primary-500 group-hover:translate-x-1 transition-all"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </router-link>
+      </div>
     </section>
 
-    <section class="about">
-      <h2>What is Adler Ducking?</h2>
-      <div class="features">
-        <div class="feature">
-          <span class="icon">💬</span>
-          <h3>Reflective Conversations</h3>
-          <p>Talk with Eddie about your goals, beliefs, and life direction.</p>
+    <!-- Features -->
+    <section class="max-w-4xl mx-auto px-6 py-16">
+      <h2 class="text-2xl font-bold text-slate-800 text-center mb-12">What is Adler Ducking?</h2>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card p-6 text-center group hover:shadow-xl transition-all duration-300">
+          <div
+            class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center group-hover:scale-110 transition-transform"
+          >
+            <span class="text-3xl">💬</span>
+          </div>
+          <h3 class="font-semibold text-lg text-slate-800 mb-2">Reflective Conversations</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Talk with Eddie about your goals, beliefs, and life direction in a safe, judgment-free
+            space.
+          </p>
         </div>
-        <div class="feature">
-          <span class="icon">📊</span>
-          <h3>Structured Schema</h3>
-          <p>Build a personal model based on Adlerian psychology concepts.</p>
+
+        <div class="card p-6 text-center group hover:shadow-xl transition-all duration-300">
+          <div
+            class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center group-hover:scale-110 transition-transform"
+          >
+            <span class="text-3xl">📊</span>
+          </div>
+          <h3 class="font-semibold text-lg text-slate-800 mb-2">Structured Schema</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            Build a personal model based on Adlerian psychology concepts, from your own words.
+          </p>
         </div>
-        <div class="feature">
-          <span class="icon">🎯</span>
-          <h3>Your Thinking, Visible</h3>
-          <p>See patterns in your own words, not advice from others.</p>
+
+        <div class="card p-6 text-center group hover:shadow-xl transition-all duration-300">
+          <div
+            class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center group-hover:scale-110 transition-transform"
+          >
+            <span class="text-3xl">🎯</span>
+          </div>
+          <h3 class="font-semibold text-lg text-slate-800 mb-2">Your Thinking, Visible</h3>
+          <p class="text-slate-600 text-sm leading-relaxed">
+            See patterns in your own words—not advice from others, but your authentic self.
+          </p>
         </div>
       </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 text-slate-500 text-sm">
+      <p>Powered by Adler Schema</p>
+    </footer>
   </div>
 </template>
-
-<style scoped>
-.home {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px;
-}
-
-.hero {
-  text-align: center;
-  padding: 60px 0;
-}
-
-.logo {
-  font-size: 80px;
-  margin-bottom: 16px;
-}
-
-h1 {
-  font-size: 36px;
-  margin: 0 0 12px;
-}
-
-.tagline {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 32px;
-}
-
-.cta {
-  padding: 16px 32px;
-  font-size: 18px;
-  font-weight: 600;
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.cta:hover {
-  background: #2563eb;
-}
-
-.cta:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.conversations {
-  margin-top: 48px;
-}
-
-.conversations h2 {
-  font-size: 20px;
-  margin-bottom: 16px;
-}
-
-.conversations ul {
-  list-style: none;
-  padding: 0;
-}
-
-.conversations li a {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  text-decoration: none;
-  color: inherit;
-  transition: background 0.2s;
-}
-
-.conversations li a:hover {
-  background: #eee;
-}
-
-.conversations .title {
-  font-weight: 500;
-}
-
-.conversations .date {
-  color: #666;
-  font-size: 14px;
-}
-
-.about {
-  margin-top: 64px;
-}
-
-.about h2 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 32px;
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
-}
-
-.feature {
-  text-align: center;
-  padding: 24px;
-  background: #f9fafb;
-  border-radius: 12px;
-}
-
-.feature .icon {
-  font-size: 40px;
-}
-
-.feature h3 {
-  font-size: 16px;
-  margin: 12px 0 8px;
-}
-
-.feature p {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-}
-</style>
