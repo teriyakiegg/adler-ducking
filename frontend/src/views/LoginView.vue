@@ -31,11 +31,11 @@ function handleLoginError() {
 
     <div class="relative card p-10 max-w-md w-full mx-4">
       <div class="text-center mb-8">
-        <div
-          class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-eddie-light to-eddie rounded-full shadow-xl shadow-eddie/30 mb-6 animate-float"
-        >
-          <span class="text-4xl">🦆</span>
-        </div>
+        <img
+          src="/eddie.png"
+          alt="Eddie"
+          class="w-24 h-24 mx-auto rounded-full shadow-xl shadow-eddie/30 mb-6 animate-float object-cover"
+        />
         <h1 class="text-3xl font-bold text-slate-800 mb-2">Adler Ducking</h1>
         <p class="text-slate-600">Sign in to start your journey with Eddie</p>
       </div>

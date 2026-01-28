@@ -12,7 +12,8 @@
       "Bash(~/.bashrc)",
       "Bash(export PATH=\"/opt/homebrew/opt/postgresql@17/bin:$PATH\":*)",
       "Bash(bin/rails generate:*)",
-      "Bash(bin/rails db:migrate:*)"
+      "Bash(bin/rails db:migrate:*)",
+      "Bash(docker:*)"
     ]
   }
 }

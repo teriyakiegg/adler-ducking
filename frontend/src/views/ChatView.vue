@@ -91,11 +91,7 @@ function handleKeyDown(event: KeyboardEvent) {
             </svg>
           </button>
           <div class="flex items-center gap-3">
-            <div
-              class="w-10 h-10 bg-gradient-to-br from-eddie-light to-eddie rounded-full flex items-center justify-center shadow-lg shadow-eddie/20"
-            >
-              <span class="text-xl">🦆</span>
-            </div>
+            <img src="/eddie.png" alt="Eddie" class="w-10 h-10 rounded-full shadow-lg shadow-eddie/20 object-cover" />
             <div>
               <h1 class="font-semibold text-slate-800">Chat with Eddie</h1>
               <p class="text-xs text-slate-500">Your Adlerian thinking duck</p>
@@ -110,11 +106,11 @@ function handleKeyDown(event: KeyboardEvent) {
       <div class="max-w-3xl mx-auto px-6 py-8">
         <!-- Welcome message -->
         <div v-if="messages.length === 0" class="text-center py-16">
-          <div
-            class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-eddie-light to-eddie rounded-full shadow-2xl shadow-eddie/30 mb-6 animate-float"
-          >
-            <span class="text-5xl">🦆</span>
-          </div>
+          <img
+            src="/eddie.png"
+            alt="Eddie"
+            class="w-32 h-32 mx-auto rounded-full shadow-2xl shadow-eddie/30 mb-6 animate-float object-cover"
+          />
           <h2 class="text-2xl font-bold text-slate-800 mb-3">Hi! I'm Eddie</h2>
           <p class="text-slate-600 max-w-md mx-auto leading-relaxed">
             I'm a duck learning Adlerian psychology. I'm here to listen and help you explore your
@@ -129,11 +125,7 @@ function handleKeyDown(event: KeyboardEvent) {
 
           <!-- Typing indicator -->
           <div v-if="isLoading" class="flex items-start gap-4">
-            <div
-              class="w-10 h-10 bg-gradient-to-br from-eddie-light to-eddie rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-eddie/20"
-            >
-              <span class="text-xl">🦆</span>
-            </div>
+            <img src="/eddie.png" alt="Eddie" class="w-10 h-10 rounded-full flex-shrink-0 shadow-lg shadow-eddie/20 object-cover" />
             <div class="card px-5 py-4">
               <div class="flex gap-1">
                 <span class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>

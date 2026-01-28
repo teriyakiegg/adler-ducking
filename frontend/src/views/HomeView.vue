@@ -49,11 +49,11 @@ async function startNewConversation() {
       <div class="relative max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
         <!-- Eddie mascot -->
         <div class="mb-8">
-          <div
-            class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-eddie-light to-eddie rounded-full shadow-2xl shadow-eddie/30 animate-float"
-          >
-            <span class="text-7xl">🦆</span>
-          </div>
+          <img
+            src="/eddie.png"
+            alt="Eddie"
+            class="w-40 h-40 mx-auto rounded-full shadow-2xl shadow-eddie/30 animate-float object-cover"
+          />
         </div>
 
         <h1

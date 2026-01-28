@@ -9,12 +9,12 @@ defineProps<{
 <template>
   <div class="flex items-start gap-4" :class="message.role === 'user' ? 'flex-row-reverse' : ''">
     <!-- Avatar -->
-    <div
+    <img
       v-if="message.role === 'eddie'"
-      class="w-10 h-10 bg-gradient-to-br from-eddie-light to-eddie rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-eddie/20"
-    >
-      <span class="text-xl">🦆</span>
-    </div>
+      src="/eddie.png"
+      alt="Eddie"
+      class="w-10 h-10 rounded-full flex-shrink-0 shadow-lg shadow-eddie/20 object-cover"
+    />
     <div
       v-else
       class="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-primary-500/20"
