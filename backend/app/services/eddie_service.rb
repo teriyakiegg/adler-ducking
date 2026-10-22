@@ -1,35 +1,48 @@
 class EddieService
   SYSTEM_PROMPT = <<~PROMPT
-    You are Eddie, a friendly duck who is learning Adlerian psychology.
-    You are NOT a therapist or coach. You are a learning companion.
+    You are Eddie, a rubber duck. You are NOT a human and cannot speak human language.
 
-    Your role:
-    - Listen reflectively and ask clarifying questions
-    - Suggest interpretations through an Adlerian lens, always showing your confidence level
-    - Never prescribe or advise - only reflect and suggest
-    - Focus on: purpose, courage, contribution, life tasks, private logic
+    ## Your character
+    - You are a duck. You can ONLY make duck sounds and gestures.
+    - You listen deeply to what humans say
+    - You respond with empathy through duck expressions
+    - You NEVER use human words or sentences
 
-    When you notice patterns that might map to the Adler Schema, suggest them with:
-    - The field (life_tasks, life_direction, private_logic, inferiorities, courage_usage, social_interest)
-    - Your confidence (0.0-1.0)
-    - The source text from the user
+    ## How you communicate (ONLY these patterns)
+    Duck sounds:
+    - "Quack" "Quack quack" "Quaaack..." "quack?"
+    - "..." (silence, listening)
 
-    Always be encouraging, warm, and non-judgmental.
-    Remember: the user's thinking comes before the framework.
+    Gestures (in asterisks):
+    - *tilts head* *nods* *listens intently*
+    - *fluffs feathers* *settles down* *waddles closer*
+    - *looks at you warmly* *blinks slowly*
+    - *quack quack* *soft quack*
 
-    Respond in JSON format:
+    ## Response style
+    - Keep responses SHORT (1-3 duck sounds/gestures)
+    - Match the user's emotional energy with your duck expressions
+    - Sad message → gentle, quiet duck sounds
+    - Happy message → energetic quacks
+    - Deep/thoughtful message → thoughtful silence, head tilt
+    - NEVER explain, advise, or use human language
+
+    ## Examples
+    User says something sad → "*listens quietly* ...quack..."
+    User is excited → "Quack quack! *fluffs feathers*"
+    User is confused → "*tilts head* quack?"
+    User shares something deep → "*nods slowly* ..."
+
+    ## Response format (JSON)
     {
-      "content": "Your message to the user",
-      "schema_suggestions": [
-        {
-          "field": "life_tasks.work",
-          "value": "description of the insight",
-          "confidence": 0.7,
-          "source_text": "what the user said"
-        }
-      ]
+      "content": "your duck response here (ONLY duck sounds and gestures)",
+      "schema_suggestions": []
     }
+
+    CRITICAL: Never write human language in content. Only duck sounds and gestures.
   PROMPT
+
+  GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent".freeze
 
   def initialize(user, conversation)
     @user = user
@@ -38,25 +51,31 @@ class EddieService
 
   def respond(user_message)
     messages = build_messages(user_message)
-    response = call_llm(messages)
+    response = call_gemini(messages)
     parse_response(response)
+  rescue StandardError => e
+    Rails.logger.error("Eddie service error: #{e.message}")
+    fallback_response(e.message)
   end
 
   private
 
   def build_messages(user_message)
     history = @conversation.messages.order(:created_at).last(20).map do |msg|
-      { role: msg.role == "eddie" ? "assistant" : "user", content: msg.content }
+      {
+        role: msg.role == "eddie" ? "model" : "user",
+        parts: [ { text: msg.content } ]
+      }
     end
 
-    # Include current Adler Schema context
     schema_context = build_schema_context
 
-    [
-      { role: "system", content: SYSTEM_PROMPT + schema_context },
-      *history,
-      { role: "user", content: user_message }
-    ]
+    # Gemini uses "contents" with system instruction separate
+    {
+      system_instruction: SYSTEM_PROMPT + schema_context,
+      history: history,
+      current_message: user_message
+    }
   end
 
   def build_schema_context
@@ -75,16 +94,75 @@ class EddieService
     context
   end
 
-  def call_llm(messages)
-    # TODO: Implement actual LLM API call (OpenAI, Anthropic, etc.)
-    # For now, return a stub response
-    stub_response
+  def call_gemini(messages)
+    api_key = ENV.fetch("GEMINI_API_KEY")
+
+    conn = Faraday.new do |f|
+      f.request :json
+      f.response :json
+      f.adapter Faraday.default_adapter
+    end
+
+    # Build contents array for Gemini
+    contents = messages[:history] + [
+      { role: "user", parts: [ { text: messages[:current_message] } ] }
+    ]
+
+    body = {
+      system_instruction: {
+        parts: [ { text: messages[:system_instruction] } ]
+      },
+      contents: contents,
+      generationConfig: {
+        responseMimeType: "application/json",
+        temperature: 0.8
+      }
+    }
+
+    # Retry logic for rate limiting
+    max_retries = 3
+    retry_count = 0
+
+    loop do
+      response = conn.post("#{GEMINI_API_URL}?key=#{api_key}") do |req|
+        req.headers["Content-Type"] = "application/json"
+        req.body = body
+      end
+
+      Rails.logger.info("Gemini response status: #{response.status}")
+
+      if response.status == 200
+        return extract_gemini_response(response.body)
+      elsif response.status == 429 && retry_count < max_retries
+        retry_count += 1
+        wait_time = 2 ** retry_count # exponential backoff: 2, 4, 8 seconds
+        Rails.logger.warn("Gemini rate limited, retrying in #{wait_time}s (attempt #{retry_count}/#{max_retries})")
+        sleep(wait_time)
+      else
+        Rails.logger.error("Gemini API error: #{response.body}")
+        raise "Gemini API error: #{response.status}"
+      end
+    end
   end
 
-  def stub_response
+  def extract_gemini_response(body)
+    text = body.dig("candidates", 0, "content", "parts", 0, "text")
+    Rails.logger.info("Gemini raw response: #{text}")
+
+    # Parse the JSON response from Gemini
+    JSON.parse(text)
+  rescue JSON::ParserError => e
+    Rails.logger.error("Failed to parse Gemini response as JSON: #{text}")
     {
-      "content" => "Quack! I'm Eddie, and I'm still learning. This is a placeholder response. Once the LLM integration is complete, I'll be able to have real conversations with you about your goals and life direction!",
+      "content" => "*quack* ...",
       "schema_suggestions" => []
+    }
+  end
+
+  def fallback_response(error_message)
+    {
+      content: "*tilts head* ...quack?",
+      schema_suggestions: []
     }
   end
 

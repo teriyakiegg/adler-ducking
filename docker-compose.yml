@@ -22,6 +22,7 @@ services:
     environment:
       DATABASE_URL: postgres://adler:adler_dev@db:5432/adler_development
       RAILS_ENV: development
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     depends_on:
       - db
     stdin_open: true

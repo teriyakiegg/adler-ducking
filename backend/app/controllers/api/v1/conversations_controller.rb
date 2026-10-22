@@ -1,5 +1,5 @@
 class Api::V1::ConversationsController < ApplicationController
-  before_action :set_conversation, only: [ :show ]
+  before_action :set_conversation, only: [ :show, :destroy ]
 
   def index
     @conversations = current_user.conversations.order(created_at: :desc)
@@ -17,6 +17,11 @@ class Api::V1::ConversationsController < ApplicationController
     else
       render json: { errors: @conversation.errors }, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @conversation.destroy!
+    head :no_content
   end
 
   private

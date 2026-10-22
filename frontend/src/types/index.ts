@@ -10,6 +10,7 @@ export interface Message {
   role: 'user' | 'eddie' | 'system'
   content: string
   created_at: string
+  observation_logs?: string[]
 }
 
 export interface Conversation {
@@ -41,6 +42,10 @@ export interface AdlerSchema {
 }
 
 export interface ChatResponse {
-  message: Message
+  user_message: Message
+  eddie_message: Message
+  observation_logs: string[]
+  eddie_reaction: 'curious' | 'thinking' | 'alert' | 'calm' | 'puzzled' | 'interested'
   schema_suggestions: SchemaMapping[]
+  conversation_title?: string
 }

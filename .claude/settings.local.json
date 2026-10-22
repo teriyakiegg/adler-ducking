@@ -13,7 +13,24 @@
       "Bash(export PATH=\"/opt/homebrew/opt/postgresql@17/bin:$PATH\":*)",
       "Bash(bin/rails generate:*)",
       "Bash(bin/rails db:migrate:*)",
-      "Bash(docker:*)"
+      "Bash(docker:*)",
+      "Bash(bundle install:*)",
+      "Bash(ruby --version:*)",
+      "Bash(gem install:*)",
+      "Bash(gcloud config get-value:*)",
+      "Bash(gcloud help:*)",
+      "Bash(vercel env add:*)",
+      "Bash(gcloud auth list:*)",
+      "Bash(gcloud projects list:*)",
+      "Bash(gcloud config set:*)",
+      "Bash(gcloud alpha iap oauth-clients:*)",
+      "Bash(gcloud services list:*)",
+      "Bash(gcloud services enable:*)",
+      "Bash(vercel env:*)",
+      "Bash(yes:*)",
+      "Bash(fly status:*)",
+      "Bash(fly deploy:*)",
+      "Bash(fly logs:*)"
     ]
   }
 }

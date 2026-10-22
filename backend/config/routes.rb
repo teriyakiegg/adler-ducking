@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       post "auth/google", to: "auth#google"
       get "auth/me", to: "auth#me"
 
-      resources :conversations, only: [ :index, :show, :create ] do
+      resources :conversations, only: [ :index, :show, :create, :destroy ] do
         resources :messages, only: [ :create ]
         post :chat, to: "chat#create"
       end

@@ -28,6 +28,11 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     throw new Error(`API Error: ${response.status}`)
   }
 
+  // Handle 204 No Content
+  if (response.status === 204) {
+    return undefined as T
+  }
+
   return response.json()
 }
 
@@ -55,6 +60,11 @@ export const api = {
       request<Conversation>('/conversations', {
         method: 'POST',
         body: JSON.stringify({ conversation: { title } }),
+      }),
+
+    delete: (id: number) =>
+      request<void>(`/conversations/${id}`, {
+        method: 'DELETE',
       }),
   },
 

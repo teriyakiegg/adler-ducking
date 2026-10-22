@@ -30,6 +30,18 @@ async function startNewConversation() {
   }
 }
 
+async function deleteConversation(id: number, event: Event) {
+  event.preventDefault()
+  event.stopPropagation()
+  if (!confirm('Delete this conversation?')) return
+  try {
+    await api.conversations.delete(id)
+    conversations.value = conversations.value.filter(c => c.id !== id)
+  } catch (error) {
+    console.error('Failed to delete conversation:', error)
+  }
+}
+
 function logout() {
   auth.logout()
   router.push('/login')
@@ -109,7 +121,7 @@ function logout() {
             Starting...
           </span>
           <span v-else class="flex items-center gap-2">
-            Start Conversation
+            New Conversation
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
@@ -151,18 +163,29 @@ function logout() {
                 {{ conv.title }}
               </div>
               <div class="text-sm text-slate-500">
-                {{ new Date(conv.created_at).toLocaleDateString('ja-JP') }}
+                {{ new Date(conv.created_at).toLocaleString('ja-JP', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
               </div>
             </div>
           </div>
-          <svg
-            class="w-5 h-5 text-slate-400 group-hover:text-primary-500 group-hover:translate-x-1 transition-all"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
+          <div class="flex items-center gap-2">
+            <button
+              @click="deleteConversation(conv.id, $event)"
+              class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+              title="Delete"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+            <svg
+              class="w-5 h-5 text-slate-400 group-hover:text-primary-500 group-hover:translate-x-1 transition-all"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </router-link>
       </div>
     </section>

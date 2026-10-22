@@ -7,10 +7,27 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "localhost:5173", "127.0.0.1:5173" # Vite dev server
+    # Development origins
+    origins_list = [ "localhost:5173", "127.0.0.1:5173" ]
+
+    # Production (Vercel) - only allow specific URL, no wildcards
+    if ENV["FRONTEND_URL"].present?
+      origins_list << ENV["FRONTEND_URL"].gsub(%r{^https?://}, "")
+    end
+
+    # Additional allowed origins (comma-separated) for preview deployments
+    # Set ALLOWED_ORIGINS env var with specific preview URLs when needed
+    if ENV["ALLOWED_ORIGINS"].present?
+      ENV["ALLOWED_ORIGINS"].split(",").each do |origin|
+        origins_list << origin.strip.gsub(%r{^https?://}, "")
+      end
+    end
+
+    origins(*origins_list)
 
     resource "*",
       headers: :any,
-      methods: [ :get, :post, :put, :patch, :delete, :options, :head ]
+      methods: [ :get, :post, :put, :patch, :delete, :options, :head ],
+      max_age: 86400
   end
 end
